@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File List</title>
+</head>
+<body>
+    <h1>Files in Directory</h1>
+    <ul>
+        <?php
+        $directoryPath = 'C:/Users/tjmol/OneDrive/Desktop/MyNewResume_files/';
+        $files = glob($directoryPath . '*');
+
+        foreach ($files as $file) {
+            echo '<li><a href="'C:/Users/tjmol/OneDrive/Desktop/MyNewResume_files/'">' C:/Users/tjmol/OneDrive/Desktop/MyNewResume_files/ </a></li>
+        }
+        ?>
+    </ul>
+</body>
+</html>
