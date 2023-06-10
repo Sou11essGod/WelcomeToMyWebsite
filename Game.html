@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Word Guessing Game</title>
+  <style>body {
+    background-color: rgb(197, 38, 38);
+    color: white;}
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .retry-button {
+      margin-top: 20px;
+      color: rgb(0, 0, 0);
+    }</style>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+    nav {
+      background-color: #d88e8e;
+      color: #fff;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav li {
+      margin: 0 10px;
+    }
+
+    nav a {
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 8px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background-color: #ca8181;
+    }
+    
+    body {
+      padding-top: 60px;
+    }
+  </style>
+  <nav>
+    <ul>
+      <li><a href="http://eve.kean.edu/~molnart/MyPage.html">Home</a></li>
+      <li><a href="http://eve.kean.edu/~molnart/Resume.html">Resume</a></li>
+      <li><a href="http://eve.kean.edu/~molnart/Game.html">Game</a></li>
+      <li><a href="http://eve.kean.edu/~molnart/Aboutme.html">About Me</a></li>
+      <li><a href="http://eve.kean.edu/~molnart/Contactinfo.html">Contact Information</a></li>
+      <li><a href="http://eve.kean.edu/~molnart/SocialMedia.html">Social Media</a> </li>
+    </ul>
+  </nav>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    
+    h1 {
+      color: #36b73a;
+    }
+    
+    .guess-input {
+      margin-top: 20px;
+    }
+    
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    
+    .retry-button {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Word Guessing Game</h1>
+  <p>Guess the fruit by entering a letter:</p>
+  <div class="guess-input">
+    <input type="text" id="letter-input" maxlength="1">
+    <button onclick="checkGuess()">Submit</button>
+  </div>
+  <div class="result" id="result"></div>
+  <button class="retry-button" onclick="retryGame()">Retry</button>
+
+  <script>
+    var words = ["banana", "apple", "orange", "grape", "strawberry", "peach"];
+    
+    var currentWordIndex;
+    
+    // Array to store guessed letters
+    var guessedLetters = [];
+    
+    // Number of chances
+    var chances = 5;
+    
+    // Function to initialize the game
+    function initializeGame() {
+      currentWordIndex = Math.floor(Math.random() * words.length);
+      guessedLetters = [];
+      chances = 15;
+      updateResult("");
+      enableInput();
+    }
+    
+    // Function to check the guessed letter
+    function checkGuess() {
+      var letterInput = document.getElementById("letter-input");
+      var letter = letterInput.value.toLowerCase();
+      letterInput.value = "";
+      
+      if (!letter.match(/[a-z]/i)) {
+        alert("Please enter a valid letter!");
+        return;
+      }
+      
+      if (guessedLetters.includes(letter)) {
+        alert("You already guessed that letter!");
+        return;
+      }
+      
+      guessedLetters.push(letter);
+      chances--;
+      
+      var hiddenWord = getHiddenWord();
+      
+      if (words[currentWordIndex].includes(letter)) {
+        updateResult("Correct guess! The word: " + hiddenWord);
+      } else {
+        updateResult("Wrong guess! The word: " + hiddenWord);
+      }
+      
+      if (hiddenWord === words[currentWordIndex]) {
+        updateResult("Congratulations! You guessed the word: " + hiddenWord, "green");
+        disableInput();
+      } else if (chances === 0) {
+        updateResult("Game over! You ran out of chances. The word was: " + words[currentWordIndex], "red");
+        disableInput();
+      } else {
+        updateResult("Chances left: " + chances);
+      }
+    }
+    // Function to check the guessed letter
+function checkGuess() {
+  var letterInput = document.getElementById("letter-input");
+  var letter = letterInput.value.toLowerCase();
+  letterInput.value = "";
+
+  if (!letter.match(/[a-z]/i)) {
+    alert("Please enter a valid letter!");
+    return;
+  }
+
+  if (guessedLetters.includes(letter)) {
+    alert("You already guessed that letter!");
+    return;
+  }
+
+  guessedLetters.push(letter);
+  chances--;
+
+  var hiddenWord = getHiddenWord();
+
+  if (words[currentWordIndex].includes(letter)) {
+    updateResult("Correct guess! The word: " + hiddenWord);
+    updateWordWithLetter(letter);
+  } else {
+    updateResult("Wrong guess! The word: " + hiddenWord);
+  }
+
+  if (hiddenWord === words[currentWordIndex]) {
+    updateResult("Congratulations! You guessed the word: " + hiddenWord, "green");
+    disableInput();
+  } else if (chances === 0) {
+    updateResult("Game over! You ran out of chances. The word was: " + words[currentWordIndex], "red");
+    disableInput();
+  } else {
+    updateResult("Chances left: " + chances);
+  }
+}
+
+// Function to update the word with the correctly guessed letter
+function updateWordWithLetter(letter) {
+  var wordDiv = document.getElementById("word");
+  var word = words[currentWordIndex];
+  var updatedWord = "";
+  for (var i = 0; i < word.length; i++) {
+    if (guessedLetters.includes(word[i])) {
+      updatedWord += word[i];
+    } else {
+      updatedWord += "-";
+    }
+  }
+  wordDiv.textContent = updatedWord;
+}
+
+    // Function to generate the hidden word with dashes for unguessed letters
+    function getHiddenWord() {
+      var hiddenWord = "";
+      for (var i = 0; i < words[currentWordIndex].length; i++) {
+        if (guessedLetters.includes(words[currentWordIndex][i])) {
+          hiddenWord += words[currentWordIndex][i];
+        } else {
+          hiddenWord += "-";
+        }
+      }
+      return hiddenWord;
+    }
+    
+    // Function to update the result message
+    function updateResult(message, color) {
+      var resultDiv = document.getElementById("result");
+      resultDiv.textContent = message;
+      resultDiv.style.color = color || "initial";
+    }
+    
+    // Function to enable input fields
+    function enableInput() {
+      var letterInput = document.getElementById("letter-input");
+      var submitBtn = document.querySelector("button");
+      letterInput.disabled = false;
+      submitBtn.disabled = false;
+    }
+    
+    // Function to disable input fields
+    function disableInput() {
+      var letterInput = document.getElementById("letter-input");
+      var submitBtn = document.querySelector("button");
+      letterInput.disabled = true;
+      submitBtn.disabled = true;
+    }
+    
+    // Function to retry the game
+    function retryGame() {
+      initializeGame();
+    }
+    
+    // Initialize the game
+    initializeGame();
+    
+    
+  </script>
+</body>
+</html>
